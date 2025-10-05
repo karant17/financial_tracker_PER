@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Financial Tracker Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+</head>
+<body>
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Header with Profile Selector -->
+    <header class="header glass-effect">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="header-title gradient-text">💰 FinTrack Pro</h1>
+                    <div class="profile-selector">
+                        <button class="profile-btn" id="profile-btn">
+                            <span class="profile-icon" id="profile-icon">👨‍👩‍👧‍👦</span>
+                            <span class="profile-name" id="profile-name">Karan & Family</span>
+                            <span class="chevron">▼</span>
+                        </button>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <div class="profile-list" id="profile-list"></div>
+                            <div class="profile-actions">
+                                <button class="btn btn-secondary btn-sm" id="add-profile-btn">➕ Add Profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-icon sun-icon">☀️</span>
+                        <span class="theme-icon moon-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <div class="nav-pills">
+                <button class="nav-pill active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">Dashboard</span>
+                </button>
+                <button class="nav-pill" data-section="accounts">
+                    <span class="nav-icon">🏦</span>
+                    <span class="nav-text">Accounts</span>
+                </button>
+                <button class="nav-pill" data-section="income">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">Income</span>
+                </button>
+                <button class="nav-pill" data-section="expenses">
+                    <span class="nav-icon">💸</span>
+                    <span class="nav-text">Expenses</span>
+                </button>
+                <button class="nav-pill" data-section="loans">
+                    <span class="nav-icon">🏦</span>
+                    <span class="nav-text">Loans</span>
+                </button>
+                <button class="nav-pill" data-section="master">
+                    <span class="nav-icon">📋</span>
+                    <span class="nav-text">Master</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <div class="section-header">
+                    <h2 class="section-title">Financial Overview</h2>
+                    <p class="section-subtitle">Track your income, expenses, and savings at a glance</p>
+                </div>
+
+                <!-- Financial Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card income-card">
+                        <div class="metric-icon">💰</div>
+                        <div class="metric-content">
+                            <div class="metric-value" id="total-income">₹0</div>
+                            <div class="metric-label">Total Income</div>
+                        </div>
+                        <div class="metric-trend positive">
+                            <span class="trend-icon">📈</span>
+                            <span class="trend-text">+12%</span>
+                        </div>
+                    </div>
+                    <div class="metric-card expense-card">
+                        <div class="metric-icon">💸</div>
+                        <div class="metric-content">
+                            <div class="metric-value" id="total-expenses">₹0</div>
+                            <div class="metric-label">Total Expenses</div>
+                        </div>
+                        <div class="metric-trend negative">
+                            <span class="trend-icon">📉</span>
+                            <span class="trend-text">-8%</span>
+                        </div>
+                    </div>
+                    <div class="metric-card loan-card">
+                        <div class="metric-icon">🏦</div>
+                        <div class="metric-content">
+                            <div class="metric-value" id="total-emis">₹0</div>
+                            <div class="metric-label">Monthly EMIs</div>
+                        </div>
+                        <div class="metric-trend neutral">
+                            <span class="trend-icon">➡️</span>
+                            <span class="trend-text">0%</span>
+                        </div>
+                    </div>
+                    <div class="metric-card savings-card">
+                        <div class="metric-icon">💎</div>
+                        <div class="metric-content">
+                            <div class="metric-value" id="net-savings">₹0</div>
+                            <div class="metric-label">Net Savings</div>
+                        </div>
+                        <div class="metric-trend positive">
+                            <span class="trend-icon">🎉</span>
+                            <span class="trend-text">Great!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <div class="chart-card">
+                        <div class="card-header">
+                            <h3>Monthly Trends</h3>
+                            <div class="chart-controls">
+                                <button class="chart-btn active" data-period="6m">6M</button>
+                                <button class="chart-btn" data-period="1y">1Y</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="monthly-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="activity-card">
+                        <div class="card-header">
+                            <h3>Recent Activity</h3>
+                            <button class="btn btn-ghost btn-sm">View All</button>
+                        </div>
+                        <div class="activity-list" id="recent-activity"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Accounts Section -->
+            <section id="accounts" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Account Management</h2>
+                    <button class="btn btn-primary" id="add-account-btn">
+                        <span class="btn-icon">➕</span>
+                        Add Account
+                    </button>
+                </div>
+
+                <!-- Account Summary Cards -->
+                <div class="accounts-summary" id="accounts-summary"></div>
+
+                <!-- Account Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" data-tab="credit-cards">💳 Credit Cards</button>
+                        <button class="tab-btn" data-tab="bank-accounts">🏦 Bank Accounts</button>
+                        <button class="tab-btn" data-tab="reconciliation">⚖️ Reconciliation</button>
+                    </div>
+
+                    <!-- Credit Cards Tab -->
+                    <div id="credit-cards" class="tab-content active">
+                        <div class="credit-cards-grid" id="credit-cards-grid"></div>
+                    </div>
+
+                    <!-- Bank Accounts Tab -->
+                    <div id="bank-accounts" class="tab-content">
+                        <div class="bank-accounts-grid" id="bank-accounts-grid"></div>
+                    </div>
+
+                    <!-- Reconciliation Tab -->
+                    <div id="reconciliation" class="tab-content">
+                        <div class="reconciliation-container">
+                            <div class="reconciliation-header">
+                                <h3>Transaction Reconciliation</h3>
+                                <p>Match your expenses with credit card transactions</p>
+                            </div>
+                            <div class="reconciliation-grid">
+                                <div class="reconciliation-section">
+                                    <h4>📝 Your Expenses</h4>
+                                    <div class="transactions-list" id="expenses-list"></div>
+                                </div>
+                                <div class="reconciliation-section">
+                                    <h4>💳 Credit Card Transactions</h4>
+                                    <div class="transactions-list" id="credit-transactions-list"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Income Section -->
+            <section id="income" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Income Management</h2>
+                    <button class="btn btn-primary" id="add-income-btn">
+                        <span class="btn-icon">➕</span>
+                        Add Income
+                    </button>
+                </div>
+                <div class="data-table-container">
+                    <table class="data-table" id="income-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Source</th>
+                                <th>Type</th>
+                                <th>Mode</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Expenses Section -->
+            <section id="expenses" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Expense Management</h2>
+                    <button class="btn btn-primary" id="add-expense-btn">
+                        <span class="btn-icon">➕</span>
+                        Add Expense
+                    </button>
+                </div>
+                <div class="data-table-container">
+                    <table class="data-table" id="expense-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Mode</th>
+                                <th>Account</th>
+                                <th>Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Loans Section -->
+            <section id="loans" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Loan Management</h2>
+                    <button class="btn btn-primary" id="add-loan-btn">
+                        <span class="btn-icon">➕</span>
+                        Add Loan
+                    </button>
+                </div>
+                <div class="loans-grid" id="loans-grid"></div>
+            </section>
+
+            <!-- Master Section -->
+            <section id="master" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Master Data Management</h2>
+                    <p class="section-subtitle">Manage dropdown options and profiles</p>
+                </div>
+                
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" data-tab="dropdowns">📋 Categories</button>
+                        <button class="tab-btn" data-tab="profiles">👥 Profiles</button>
+                    </div>
+
+                    <div id="dropdowns" class="tab-content active">
+                        <div class="master-grid" id="master-grid"></div>
+                    </div>
+
+                    <div id="profiles" class="tab-content">
+                        <div class="profiles-grid" id="profiles-grid"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button class="fab" id="fab">
+        <span class="fab-icon">➕</span>
+    </button>
+    <div class="fab-menu" id="fab-menu">
+        <button class="fab-item" data-action="add-income">
+            <span class="fab-item-icon">💰</span>
+            <span class="fab-item-label">Income</span>
+        </button>
+        <button class="fab-item" data-action="add-expense">
+            <span class="fab-item-icon">💸</span>
+            <span class="fab-item-label">Expense</span>
+        </button>
+        <button class="fab-item" data-action="add-account">
+            <span class="fab-item-icon">🏦</span>
+            <span class="fab-item-label">Account</span>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title">Add Entry</h3>
+                <button class="modal-close" id="modal-close">✕</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-save">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal confirm-modal">
+            <div class="modal-header">
+                <h3>Confirm Action</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="confirm-cancel">Cancel</button>
+                <button class="btn btn-danger" id="confirm-ok">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Application -->
+    <script src="app.js"></script>
+</body>
+</html>
